@@ -4,3 +4,7 @@ node_modules/
 .DS_Store
 dist/
 lambda.zip
+# Security — never commit infra configs
+*-deploy-policy.json
+*-credentials.json
+secrets.*

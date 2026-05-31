@@ -15,6 +15,26 @@ const DEFAULT_TIMEOUT = 8_000;
 const MAX_BODY_BYTES = 3_000_000; // 3MB — safely covers all major sites
 
 /**
+ * Decode common HTML entities in text.
+ */
+function decodeHtml(text) {
+  if (!text) return text;
+  return text
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/')
+    .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(d))
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&hellip;/g, '…')
+    .replace(/&mdash;/g, '—')
+    .replace(/&ndash;/g, '–');
+}
+
+/**
  * Fetch a URL with timeout and size limit.
  * Returns { status, body, headers, redirectedUrl } or throws.
  */
@@ -193,13 +213,13 @@ export async function extractMetadata(url, options = {}) {
   return {
     url: ogUrl || normalizedUrl,
     resolved_url: redirectedUrl || normalizedUrl,
-    title: resolvedTitle || null,
-    description: description || null,
+    title: resolvedTitle ? decodeHtml(resolvedTitle) : null,
+    description: description ? decodeHtml(description) : null,
     image: image || null,
     favicon,
-    site_name: siteName || null,
+    site_name: siteName ? decodeHtml(siteName) : null,
     type: ogType || 'website',
-    keywords: keywords || null,
+    keywords: keywords ? decodeHtml(keywords) : null,
     status,
     cached: false,
     timestamp: new Date().toISOString(),
