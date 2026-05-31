@@ -1,0 +1,17 @@
+{
+  "name": "url-metadata-api",
+  "version": "1.0.0",
+  "description": "Fast URL metadata extraction API — returns title, description, OG image, favicon, site name from any URL",
+  "type": "module",
+  "main": "src/lambda.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test src/test.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "1.13",
+    "hono": "^4.0.0",
+    "node-html-parser": "^6.0.0"
+  }
+}
