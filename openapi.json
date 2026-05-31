@@ -10,8 +10,8 @@
   },
   "servers": [
     {
-      "url": "https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws",
-      "description": "Production"
+      "url": "https://url-metadata-api.p.rapidapi.com",
+      "description": "RapidAPI production endpoint (subscribe on RapidAPI)"
     }
   ],
   "paths": {

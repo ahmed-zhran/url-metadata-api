@@ -2,13 +2,7 @@
 
 Extract page title, Open Graph tags, favicon, and metadata from any URL — in a clean JSON response.
 
-**Zero external API costs.** No database. Just reads public HTML.
-
-```
-GET https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/metadata?url=https://example.com
-```
-
-**[View on GitHub](https://github.com/ahmed-zhran/url-metadata-api)**
+**Available on [RapidAPI](https://rapidapi.com).** Subscribe to get your API key and endpoint.
 
 ---
 
@@ -20,8 +14,20 @@ GET https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/metadat
 GET /metadata?url=<url>
 ```
 
+**Headers:**
+
+| Header | Value |
+|--------|-------|
+| `X-RapidAPI-Key` | *(your RapidAPI key)* |
+| `X-RapidAPI-Host` | `url-metadata-api.p.rapidapi.com` |
+
+**Example:**
+
 ```bash
-curl "https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/metadata?url=https://github.com"
+curl --request GET \
+  --url 'https://url-metadata-api.p.rapidapi.com/metadata?url=https://github.com' \
+  --header 'X-RapidAPI-Key: YOUR_KEY' \
+  --header 'X-RapidAPI-Host: url-metadata-api.p.rapidapi.com'
 ```
 
 **Response:**
@@ -30,8 +36,8 @@ curl "https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/metad
 {
   "url": "https://github.com",
   "resolved_url": "https://github.com",
-  "title": "GitHub · Change is constant.",
-  "description": "Join the world's most widely adopted, AI-powered developer platform...",
+  "title": "GitHub · Change is constant. GitHub keeps you ahead.",
+  "description": "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that advances humanity.",
   "image": "https://images.ctfassets.net/.../GH-Homepage-Universe-img.png",
   "favicon": "https://github.githubassets.com/favicons/favicon",
   "site_name": "GitHub",
@@ -40,24 +46,6 @@ curl "https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/metad
   "status": 200,
   "cached": false,
   "timestamp": "2026-05-31T14:52:01.406Z"
-}
-```
-
-### Health check
-
-```
-GET /
-```
-
-```bash
-curl https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/
-```
-
-```json
-{
-  "service": "url-metadata-api",
-  "version": "1.0.0",
-  "status": "running"
 }
 ```
 
@@ -70,7 +58,7 @@ curl https://cwuievigjw7pbixvhoe4nyxcku0hnfku.lambda-url.us-east-1.on.aws/
 | `title` | string \| null | ✓ | Page `<title>` tag content |
 | `description` | string \| null | ✓ | Meta description or OG description |
 | `image` | string \| null | ✓ | OG image URL (social preview thumbnail) |
-| `favicon` | string | ✓ | Favicon URL (always resolved) |
+| `favicon` | string | ✓ | Favicon URL |
 | `site_name` | string \| null | ✓ | OG site name (e.g. "YouTube", "GitHub") |
 | `type` | string \| null | ✓ | OG type ("website", "article", etc.) |
 | `keywords` | string \| null | ✓ | Meta keywords, comma-separated |
@@ -88,6 +76,8 @@ Fields that don't exist on the page return `null`.
 | 502 | Failed to fetch the URL (timeout, DNS failure, etc.) |
 
 ## Pricing
+
+Available on RapidAPI:
 
 | Tier | Requests | Price |
 |------|----------|-------|
