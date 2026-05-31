@@ -2,33 +2,18 @@
 
 Extract page title, Open Graph tags, favicon, and metadata from any URL — in a clean JSON response.
 
-**Available on [RapidAPI](https://rapidapi.com).** Subscribe to get your API key and endpoint.
-
 ---
+
+
 
 ## Usage
 
 ### Get metadata from any URL
 
 ```
-GET /metadata?url=<url>
+GET /metadata?url=http://example.com
 ```
 
-**Headers:**
-
-| Header | Value |
-|--------|-------|
-| `X-RapidAPI-Key` | *(your RapidAPI key)* |
-| `X-RapidAPI-Host` | `url-metadata-api.p.rapidapi.com` |
-
-**Example:**
-
-```bash
-curl --request GET \
-  --url 'https://url-metadata-api.p.rapidapi.com/metadata?url=https://github.com' \
-  --header 'X-RapidAPI-Key: YOUR_KEY' \
-  --header 'X-RapidAPI-Host: url-metadata-api.p.rapidapi.com'
-```
 
 **Response:**
 
@@ -36,8 +21,8 @@ curl --request GET \
 {
   "url": "https://github.com",
   "resolved_url": "https://github.com",
-  "title": "GitHub · Change is constant. GitHub keeps you ahead.",
-  "description": "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that advances humanity.",
+  "title": "GitHub · Change is constant.",
+  "description": "Join the world's most widely adopted, AI-powered developer platform...",
   "image": "https://images.ctfassets.net/.../GH-Homepage-Universe-img.png",
   "favicon": "https://github.githubassets.com/favicons/favicon",
   "site_name": "GitHub",
@@ -49,31 +34,46 @@ curl --request GET \
 }
 ```
 
+### Health check
+
+```
+GET /
+```
+
+```json
+{
+  "service": "url-metadata-api",
+  "version": "1.0.0",
+  "status": "running"
+}
+```
+
 ## Response Fields
 
-| Field | Type | Always | Description |
-|-------|------|:------:|-------------|
+| Field | Type | Always present | Description |
+|-------|------|:---:|-------------|
 | `url` | string | ✓ | The URL you requested |
 | `resolved_url` | string | ✓ | Final URL after redirects |
-| `title` | string \| null | ✓ | Page `<title>` tag content |
+| `title` | string \| null | ✓ | Page `&lt;title&gt;` tag content |
 | `description` | string \| null | ✓ | Meta description or OG description |
 | `image` | string \| null | ✓ | OG image URL (social preview thumbnail) |
-| `favicon` | string | ✓ | Favicon URL |
+| `favicon` | string | ✓ | Favicon URL (always resolved, falls back to /favicon.ico) |
 | `site_name` | string \| null | ✓ | OG site name (e.g. "YouTube", "GitHub") |
-| `type` | string \| null | ✓ | OG type ("website", "article", etc.) |
+| `type` | string \| null | ✓ | OG type ("website", "article", "video.other", etc.) |
 | `keywords` | string \| null | ✓ | Meta keywords, comma-separated |
 | `status` | integer | ✓ | HTTP status code of the fetched page |
-| `cached` | boolean | ✓ | Whether result came from cache |
-| `timestamp` | string | ✓ | ISO 8601 timestamp |
+| `cached` | boolean | ✓ | Whether this result came from cache |
+| `timestamp` | string | ✓ | ISO 8601 timestamp of when metadata was fetched |
 
-Fields that don't exist on the page return `null`.
+Fields that don't exist on the page return `null` — no placeholder defaults.
 
-## Errors
+## Error Responses
 
 | Status | Meaning |
 |--------|---------|
 | 400 | Missing or invalid `url` parameter |
-| 502 | Failed to fetch the URL (timeout, DNS failure, etc.) |
+| 502 | Failed to fetch the URL (timeout, DNS failure, invalid page) |
+| 504 | Upstream server timed out |
 
 ## Pricing
 
@@ -81,10 +81,17 @@ Available on RapidAPI:
 
 | Tier | Requests | Price |
 |------|----------|-------|
-| Free | 100 / day | $0 |
-| Basic | 10,000 / month | $5 |
-| Pro | 100,000 / month | $20 |
-| Ultra | 1,000,000 / month | $100 |
+| Basic | 1000/month | $0 |
+| Pro | 10,000/month | $5 |
+| Ultra | 100,000/month | $20 |
+| Mega | 1,000,000/month | $100 |
+
+## Tech Stack
+
+- **Node.js 18** — Native ESM, built-in HTTP client
+- **Hono** — Ultra-fast web framework (~14KB), Lambda-native
+- **node-html-parser** — C-accelerated DOM parsing
+- **AWS Lambda** — Free tier: 1M requests/month
 
 ## License
 
